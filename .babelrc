@@ -1,6 +1,4 @@
 {
-  "presets": [
-    ["env", { "modules": false }],
-    "stage-3"
-  ]
+  "presets": ["env", "flow-vue"],
+  "plugins": ["syntax-dynamic-import"]
 }

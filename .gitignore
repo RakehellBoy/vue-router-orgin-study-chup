@@ -1,12 +1,17 @@
 .DS_Store
-node_modules/
-dist/
-npm-debug.log
+node_modules
+TODOs.md
+test/e2e/reports
+test/e2e/screenshots
+selenium-debug.log
+dist/*.gz
+dist/*.map
+explorations
+docs/.vuepress/dist
 yarn-error.log
-
-# Editor directories and files
 .idea
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
+.vscode/settings.json
+.env
+selenium-server.log
+local.log
+browserstack.err
