@@ -8,7 +8,7 @@ import { extend } from './misc'
 export const supportsPushState =
   inBrowser &&
   (function () {
-    const ua = window.navigator.userAgent
+    const ua = window.navigator.userAgent  //获取浏览器userAgent, 判断是否在下列判断中，如在 则该环境不支持 PushState
 
     if (
       (ua.indexOf('Android 2.') !== -1 || ua.indexOf('Android 4.0') !== -1) &&

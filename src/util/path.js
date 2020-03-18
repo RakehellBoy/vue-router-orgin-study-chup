@@ -7,7 +7,7 @@ export function resolvePath (
 ): string {
   const firstChar = relative.charAt(0)
   if (firstChar === '/') {
-    return relative
+    return relative // relative以斜杠开头直接返回 (如 /bar)
   }
 
   if (firstChar === '?' || firstChar === '#') {
@@ -42,6 +42,7 @@ export function resolvePath (
   return stack.join('/')
 }
 
+// 解析Path 拆分出hash query 和去除参数的path (如 /bar?name='chup'#name => { path: /bar, query: "name='chup'", hash: '#name' })
 export function parsePath (path: string): {
   path: string;
   query: string;
@@ -50,13 +51,13 @@ export function parsePath (path: string): {
   let hash = ''
   let query = ''
 
-  const hashIndex = path.indexOf('#')
+  const hashIndex = path.indexOf('#') // hash#在设置？参数后面
   if (hashIndex >= 0) {
     hash = path.slice(hashIndex)
     path = path.slice(0, hashIndex)
   }
 
-  const queryIndex = path.indexOf('?')
+  const queryIndex = path.indexOf('?') 
   if (queryIndex >= 0) {
     query = path.slice(queryIndex + 1)
     path = path.slice(0, queryIndex)
@@ -69,6 +70,7 @@ export function parsePath (path: string): {
   }
 }
 
+// 去除多余斜杠 (如 /like//book => /like/book)
 export function cleanPath (path: string): string {
   return path.replace(/\/\//g, '/')
 }

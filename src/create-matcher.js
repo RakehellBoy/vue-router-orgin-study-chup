@@ -13,26 +13,30 @@ export type Matcher = {
   addRoutes: (routes: Array<RouteConfig>) => void;
 };
 
+/** 根据传入的配置对象创建路由映射表 */
 export function createMatcher (
   routes: Array<RouteConfig>,
   router: VueRouter
 ): Matcher {
-  const { pathList, pathMap, nameMap } = createRouteMap(routes)
+  const { pathList, pathMap, nameMap } = createRouteMap(routes)  // 路由映射表
 
+  // 动态添加路由配置(路由比较大，一开始只配置一部分， 后续由后端返回拼接上)
   function addRoutes (routes) {
     createRouteMap(routes, pathList, pathMap, nameMap)
   }
 
+  // 匹配规则
   function match (
-    raw: RawLocation,
+    raw: RawLocation,  // raw 可以为字符串
     currentRoute?: Route,
     redirectedFrom?: Location
   ): Route {
-    const location = normalizeLocation(raw, currentRoute, false, router)
+    // { _normalized: true, path, query, hash }
+    const location = normalizeLocation(raw, currentRoute, false, router) // 路径
     const { name } = location
 
-    if (name) {
-      const record = nameMap[name]
+    if (name) { // 如果存在 name
+      const record = nameMap[name] //找出name匹配的record
       if (process.env.NODE_ENV !== 'production') {
         warn(record, `Route with name '${name}' does not exist`)
       }
@@ -61,12 +65,12 @@ export function createMatcher (
         const path = pathList[i]
         const record = pathMap[path]
         if (matchRoute(record.regex, location.path, location.params)) {
-          return _createRoute(record, location, redirectedFrom)
+          return _createRoute(record, location, redirectedFrom)  //如在pathMap中匹配到 以匹配的record创建Route
         }
       }
     }
     // no match
-    return _createRoute(null, location)
+    return _createRoute(null, location) // 没有匹配到
   }
 
   function redirect (
@@ -150,6 +154,18 @@ export function createMatcher (
     return _createRoute(null, location)
   }
 
+  // 创建路由
+  // {
+  //   name: location.name || (record && record.name),
+  //   meta: (record && record.meta) || {},
+  //   path: location.path || '/',
+  //   hash: location.hash || '',
+  //   query,
+  //   params: location.params || {},
+  //   fullPath: getFullPath(location, stringifyQuery),
+  //   matched: record ? formatMatch(record) : []
+  //   redirectedFrom
+  // }
   function _createRoute (
     record: ?RouteRecord,
     location: Location,
@@ -177,9 +193,9 @@ function matchRoute (
 ): boolean {
   const m = path.match(regex)
 
-  if (!m) {
+  if (!m) { // 没有配比到 直接返回false
     return false
-  } else if (!params) {
+  } else if (!params) { // 如m匹配到了 但params不存在直接返回true
     return true
   }
 

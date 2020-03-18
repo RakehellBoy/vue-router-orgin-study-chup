@@ -12,6 +12,17 @@ import {
   resolveAsyncComponents
 } from '../util/resolve-components'
 import { NavigationDuplicated } from './errors'
+/**
+ * 
+ * history.replaceState([data], [title], [url]);url改变 但不发出任何request请求，当前窗口仍然停留在之前的页面，replaceState方法不会修改浏览器的history，它只是简单地替换了地址栏中的URL。
+ * history.pushState([data], [title], [url]);
+ * 第一个参数用来传递我们需要的数据，当页面的状态发生变化时我们可以接收到该数据。如用户点击浏览器的后退和向前按钮。需要注意的是在Firefox中只允许传递最多640K的数据。
+   第二个参数title是一个字符串，不过截止到目前，几乎所有的浏览器都忽略该参数。
+   最后一个参数是我们想要替换的URL。
+ */
+/**
+ * History API最主要的功能就是不重新加载页面。以往我们只能通过改变window.location的值来修改当前页面的URL，这会导致整个页面被重新加载。如果你修改的只是URL中的hash，则不会导致页面被刷新。 
+*/
 
 export class History {
   router: Router
@@ -62,6 +73,7 @@ export class History {
     this.errorCbs.push(errorCb)
   }
 
+  /** 用于路由切换  */
   transitionTo (
     location: RawLocation,
     onComplete?: Function,

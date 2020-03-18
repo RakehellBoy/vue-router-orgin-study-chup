@@ -6,7 +6,12 @@ import { resolveQuery } from './query'
 import { fillParams } from './params'
 import { warn } from './warn'
 import { extend } from './misc'
-
+/**
+ * @param {*要跳转的原生未处理路径} raw 
+ * @param {*当前路径} current 
+ * @param {*} append 
+ * @param {*路由管理器} router 
+ */
 export function normalizeLocation (
   raw: RawLocation,
   current: ?Route,
@@ -15,7 +20,7 @@ export function normalizeLocation (
 ): Location {
   let next: Location = typeof raw === 'string' ? { path: raw } : raw
   // named target
-  if (next._normalized) {
+  if (next._normalized) { // 以格式化 直接返回
     return next
   } else if (next.name) {
     next = extend({}, raw)
@@ -43,13 +48,15 @@ export function normalizeLocation (
     return next
   }
 
-  const parsedPath = parsePath(next.path || '')
+  const parsedPath = parsePath(next.path || '') // 解析path 获取 hash query 和去除参数等的 path
   const basePath = (current && current.path) || '/'
-  const path = parsedPath.path
+  
+  // 以下做 path query hash 标准化
+  const path = parsedPath.path //标准化path
     ? resolvePath(parsedPath.path, basePath, append || next.append)
     : basePath
 
-  const query = resolveQuery(
+  const query = resolveQuery(  //格式化 query(获取的是一个对象 如{name: 'chup', age: 20})
     parsedPath.query,
     next.query,
     router && router.options.parseQuery
